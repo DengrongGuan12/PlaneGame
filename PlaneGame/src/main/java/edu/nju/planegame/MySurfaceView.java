@@ -78,7 +78,11 @@ public class MySurfaceView extends SurfaceView implements Runnable,SurfaceHolder
     private Vector<Bullet> vcBulletPlayer=new Vector<Bullet>();
     private int countPlayerBullet;
 
+    private Boss boss ;
+    private static Vector<Bullet> vcBulletBoss;
+
     private Vector<Boom> vcBoom=new Vector<Boom>();
+
 
 
     public MySurfaceView(Context context){
@@ -125,6 +129,8 @@ public class MySurfaceView extends SurfaceView implements Runnable,SurfaceHolder
             this.random=new Random();
             this.isBoss=false;
             this.enemyIndex=0;
+            this.boss = new Boss(bmpEnemyBoos);
+
 
 
 
@@ -172,6 +178,10 @@ public class MySurfaceView extends SurfaceView implements Runnable,SurfaceHolder
                                 vcBullet.elementAt(i).draw(canvas,paint);
                             }
                         }else{
+                            boss.draw(canvas,paint);
+                            for(int i = 0; i<vcBulletBoss.size();i++){
+                                vcBulletBoss.get(i).draw(canvas,paint);
+                            }
 
                         }
                         for(int i=0;i<vcBulletPlayer.size();i++){

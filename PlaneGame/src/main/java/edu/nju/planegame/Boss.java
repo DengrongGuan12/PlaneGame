@@ -53,6 +53,7 @@ public class Boss {
             speed -= 1;
             if(speed == 0){
                 //add eight direction bullet
+
             }
 
         }

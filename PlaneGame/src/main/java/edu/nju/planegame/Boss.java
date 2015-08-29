@@ -26,6 +26,15 @@ public class Boss {
         x=MySurfaceView.screenW/2-frameW/2;
         y=0;
     }
+    public int getX(){
+        return this.x;
+    }
+    public int getY(){
+        return this.y;
+    }
+    public int getHp(){
+        return this.hp;
+    }
     public void draw(Canvas canvas,Paint paint){
         canvas.save();
         canvas.clipRect(x,y,x+frameW,y+frameH);
@@ -53,9 +62,41 @@ public class Boss {
             speed -= 1;
             if(speed == 0){
                 //add eight direction bullet
+                MySurfaceView.vcBulletBoss.add(new Bullet(MySurfaceView.bmpBossBullet,x+30,y,Bullet.BULLET_BOSS,Bullet.DIR_UP));
+                MySurfaceView.vcBulletBoss.add(new Bullet(MySurfaceView.bmpBossBullet,x+30,y,Bullet.BULLET_BOSS,Bullet.DIR_DOWN));
+                MySurfaceView.vcBulletBoss.add(new Bullet(MySurfaceView.bmpBossBullet,x+30,y,Bullet.BULLET_BOSS,Bullet.DIR_LEFT));
+                MySurfaceView.vcBulletBoss.add(new Bullet(MySurfaceView.bmpBossBullet,x+30,y,Bullet.BULLET_BOSS,Bullet.DIR_RIGHT));
+                MySurfaceView.vcBulletBoss.add(new Bullet(MySurfaceView.bmpBossBullet,x+30,y,Bullet.BULLET_BOSS,Bullet.DIR_UP_RIGHT));
+                MySurfaceView.vcBulletBoss.add(new Bullet(MySurfaceView.bmpBossBullet,x+30,y,Bullet.BULLET_BOSS,Bullet.DIR_UP_LEFT));
+                MySurfaceView.vcBulletBoss.add(new Bullet(MySurfaceView.bmpBossBullet,x+30,y,Bullet.BULLET_BOSS,Bullet.DIR_DOWN_LEFT));
+                MySurfaceView.vcBulletBoss.add(new Bullet(MySurfaceView.bmpBossBullet,x+30,y,Bullet.BULLET_BOSS,Bullet.DIR_DOWN_RIGHT));
 
+            }
+            y += speed;
+            if(y<=0){
+                isCrazy = false;
+                speed = 5;
             }
 
         }
+    }
+    public boolean isCollisionWith(Bullet bullet){
+        int x2 = bullet.bulletX;
+        int y2 = bullet.bulletY;
+        int w2 = bullet.getWidth();
+        int h2 = bullet.getHeight();
+        if(x >= x2+w2){
+            return false;
+        }else if(x <= x2-frameW){
+            return false;
+        }else if(y >= y2+h2){
+            return false;
+        }else if(y <= y2 -frameH){
+            return false;
+        }
+        return true;
+    }
+    public void setHp(int hp){
+        this.hp = hp;
     }
 }

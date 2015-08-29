@@ -79,7 +79,7 @@ public class MySurfaceView extends SurfaceView implements Runnable,SurfaceHolder
     private int countPlayerBullet;
 
     private Boss boss ;
-    private static Vector<Bullet> vcBulletBoss;
+    public static Vector<Bullet> vcBulletBoss;
 
     private Vector<Boom> vcBoom=new Vector<Boom>();
 
@@ -130,11 +130,10 @@ public class MySurfaceView extends SurfaceView implements Runnable,SurfaceHolder
             this.isBoss=false;
             this.enemyIndex=0;
             this.boss = new Boss(bmpEnemyBoos);
-
-
-
+            vcBulletBoss = new Vector<Bullet>();
 
         }
+
     }
 
     @Override
@@ -223,7 +222,6 @@ public class MySurfaceView extends SurfaceView implements Runnable,SurfaceHolder
             case GAME_WIN:
                 break;
             case GAME_LOST:
-
                 break;
         }
         return true;
@@ -341,6 +339,41 @@ public class MySurfaceView extends SurfaceView implements Runnable,SurfaceHolder
                     }
 
                 }else{
+                    boss.logic();
+                    if(countPlayerBullet % 10 == 0){
+                        vcBulletBoss.add(new Bullet(bmpBossBullet,boss.getX()+35,boss.getY()+40,Bullet.BULLET_FLY));
+                    }
+                    for(int i =0; i< vcBulletBoss.size();i++){
+                        Bullet b = vcBulletBoss.elementAt(i);
+                        if(b.isDead){
+                            vcBulletBoss.removeElement(b);
+                        }else{
+                            b.logic();
+                        }
+                    }
+                    for(int i = 0;i<vcBulletBoss.size();i++){
+                        if(player.isCollisionWith(vcBulletBoss.elementAt(i))){
+                            player.setPlayerHp(player.getPlayerHp() - 1);
+                            if(player.getPlayerHp() <= 0){
+                                gamestate = GAME_LOST;
+                            }
+                        }
+                    }
+                    for(int i = 0;i<vcBulletPlayer.size();i++){
+                       Bullet b = vcBulletPlayer.elementAt(i);
+                        if(boss.isCollisionWith(b)){
+                            if(boss.getHp() <= 0){
+                                gamestate = GAME_WIN;
+                            }else{
+                                b.isDead = true;
+                                boss.setHp(boss.getHp() - 1);
+                                vcBoom.add(new Boom(bmpBoosBoom,boss.getX()+25,boss.getY()+30,5));
+                                vcBoom.add(new Boom(bmpBoosBoom,boss.getX()+35,boss.getY()+40,5));
+                                vcBoom.add(new Boom(bmpBoosBoom,boss.getX()+45,boss.getY()+50,5));
+
+                            }
+                        }
+                    }
 
                 }
                 countPlayerBullet++;
